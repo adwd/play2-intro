@@ -1,14 +1,19 @@
 @(title: String)(content: Html)
-
+<!--main.scala.htmlはページ全体のレイアウトを決める-->
+<!--＠が先頭に来るのはScalaのスクリプトを示す-->
+<!--テンプレートの冒頭に記述される文は、Controllerから呼び出された時の引数を表す-->
 <!DOCTYPE html>
 
 <html>
     <head>
+        <!--テンプレートの引数titleをtitleタグに設定-->
         <title>@title</title>
+        <!--＠routes.Assets.atがpublicフォルダを指す。引数でそこからのパスを指す。-->
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <script src="@routes.Assets.at("javascripts/hello.js")" type="text/javascript"></script>
     </head>
+    <!--テンプレートの引数で受け取ったcontentをbodyにはめ込んで描画する-->
     <body>
         @content
     </body>
