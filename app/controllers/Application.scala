@@ -1,23 +1,45 @@
 package controllers
 
-// Play‘S‘Ì‚ÉŠÖ‚·‚é‹@”\AƒAƒvƒŠƒP[ƒVƒ‡ƒ“İ’è‚â
-// ƒƒOo—ÍAƒ‹[ƒeƒBƒ“ƒO‚È‚Ç‚ÉŠÖ‚·‚éƒNƒ‰ƒX
+// Playå…¨ä½“ã«é–¢ã™ã‚‹æ©Ÿèƒ½ã€ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®šã‚„
+// ãƒ­ã‚°å‡ºåŠ›ã€ãƒ«ãƒ¼ãƒ†ã‚£ãƒ³ã‚°ãªã©ã«é–¢ã™ã‚‹ã‚¯ãƒ©ã‚¹
 import play.api._
 
-// MVC‚Ì”‹@”\‚ÉŠÖ‚·‚éƒNƒ‰ƒXŒQ
+// MVCã®è«¸æ©Ÿèƒ½ã«é–¢ã™ã‚‹ã‚¯ãƒ©ã‚¹ç¾¤
 import play.api.mvc._
 
-// View‚Å‚Ìƒwƒ‹ƒp[“™‚ÉŠÖ‚·‚éƒNƒ‰ƒX
+// Viewã§ã®ãƒ˜ãƒ«ãƒ‘ãƒ¼ç­‰ã«é–¢ã™ã‚‹ã‚¯ãƒ©ã‚¹
 // import play.api.views._
+
+import play.api.data.Form
+import play.api.data.Forms._
 
 import views._
 
 object Application extends Controller {
 
-  // ƒAƒNƒVƒ‡ƒ“‚ÍResult‚ğ•Ô‚·
+  case class SampleForm(message: String, name: String)
+
+  // ãƒ•ã‚©ãƒ¼ãƒ ã®message, nameãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒtextãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§ã‚ã‚‹ã“ã¨ã€ã‚¯ãƒ©ã‚¹ã®æ§‹ç¯‰ãƒ»åˆ†è§£ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç¤ºã™
+  // play.api.data case class Form[T](mapping: Mapping[T], ~~
+  val form1 = play.api.data.Form(
+    mapping("message" -> play.api.data.Forms.text, "name" -> play.api.data.Forms.text)(SampleForm.apply)(SampleForm.unapply)
+  )
+
   def index = Action {
-    // Ok‚ÍƒAƒNƒZƒX‚ª³í‚ÉŠ®—¹‚µ‚½Result‚ğ•Ô‚·
-    // index.scala.htmlƒeƒ“ƒvƒŒ[ƒg‚Éˆø”‚ğ“n‚µ‚Ä•`‰æ‚·‚é
-    Ok(html.index("Your new application is ready."))
+    Ok(html.index("ä½•ã‹æ›¸ã„ã¦", form1))
+  }
+
+  // bindFromRequestã§requestãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’ä½¿ç”¨ã™ã‚‹ãŸã‚ã€implicit requestãŒå¿…è¦
+  def send = play.api.mvc.Action { implicit request =>
+    /*
+    def bindFromRequest()(implicit request: Request[_]): Form[T]
+    Binds request data to this form, i.e. handles form submission.
+    returns a copy of this form filled with the new data
+    */
+    var resform = form1.bindFromRequest // implicitã§ãªã„å ´åˆã¯ form1.bindFromRequest()(request)
+
+    // res = request: POST /send, you typed: foo, your name: bar
+    var res = s"request: $request, you typed: ${resform.get.message}, your name: ${resform.get.name}"
+    Ok(html.index(res, resform))
   }
 }

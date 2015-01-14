@@ -1,9 +1,20 @@
-@(message: String)
-<!--index‚ÌAction‚Å•\Ž¦‚³‚ê‚éƒRƒ“ƒeƒ“ƒc-->
-<!--ŽŸ‚Ì—main‚Ímain.scala.html‚ðŒÄ‚Ño‚µ‚Ä‚¢‚é-->
-<!--()‚Ì’†‚ªtitleA{}‚Ì’†‚ªcontent‚É‚È‚é-->
+@(msg: String, form1: Form[Application.SampleForm])
+<!--Formã«åž‹å¼•æ•°ã‚’æŒ‡å®šã—ã€ãã®åž‹ã§ãƒ‡ãƒ¼ã‚¿ã®ã‚„ã‚Šã¨ã‚Šã‚’ã™ã‚‹-->
+
 @main("Welcome to Play") {
 
-    @play20.welcome(message)
+  <h1>Hello!</h1>
+  <p>@msg</p>
+  <!--helper.form(Actionã®å±žæ€§ã«sendãƒ¡ã‚½ãƒƒãƒ‰ã‚’æŒ‡å®š)
+    {ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹å…¥åŠ›ã¨submitãƒœã‚¿ãƒ³ã‚’æŒ‡å®š}-->
+  @helper.form(action = routes.Application.send){
+    @(helper.inputText (
+      field = form1("message")
+    ))
+    @(helper.inputText (
+      field = form1("name")
+    ))
 
+    <input type="submit">
+  }
 }

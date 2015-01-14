@@ -1,19 +1,19 @@
 @(title: String)(content: Html)
-<!--main.scala.html‚Íƒy[ƒW‘S‘Ì‚ÌƒŒƒCƒAƒEƒg‚ðŒˆ‚ß‚é-->
-<!--—‚ªæ“ª‚É—ˆ‚é‚Ì‚ÍScala‚ÌƒXƒNƒŠƒvƒg‚ðŽ¦‚·-->
-<!--ƒeƒ“ƒvƒŒ[ƒg‚Ì–`“ª‚É‹Lq‚³‚ê‚é•¶‚ÍAController‚©‚çŒÄ‚Ño‚³‚ê‚½Žž‚Ìˆø”‚ð•\‚·-->
+<!--main.scala.htmlã¯ãƒšãƒ¼ã‚¸å…¨ä½“ã®ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚’æ±ºã‚ã‚‹-->
+<!--ï¼ ãŒå…ˆé ­ã«æ¥ã‚‹ã®ã¯Scalaã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ç¤ºã™-->
+<!--ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®å†’é ­ã«è¨˜è¿°ã•ã‚Œã‚‹æ–‡ã¯ã€Controllerã‹ã‚‰å‘¼ã³å‡ºã•ã‚ŒãŸæ™‚ã®å¼•æ•°ã‚’è¡¨ã™-->
 <!DOCTYPE html>
 
 <html>
     <head>
-        <!--ƒeƒ“ƒvƒŒ[ƒg‚Ìˆø”title‚ðtitleƒ^ƒO‚ÉÝ’è-->
+        <!--ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®å¼•æ•°titleã‚’titleã‚¿ã‚°ã«è¨­å®š-->
         <title>@title</title>
-        <!--—routes.Assets.at‚ªpublicƒtƒHƒ‹ƒ_‚ðŽw‚·Bˆø”‚Å‚»‚±‚©‚ç‚ÌƒpƒX‚ðŽw‚·B-->
+        <!--ï¼ routes.Assets.atãŒpublicãƒ•ã‚©ãƒ«ãƒ€ã‚’æŒ‡ã™ã€‚å¼•æ•°ã§ãã“ã‹ã‚‰ã®ãƒ‘ã‚¹ã‚’æŒ‡ã™ã€‚-->
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <script src="@routes.Assets.at("javascripts/hello.js")" type="text/javascript"></script>
     </head>
-    <!--ƒeƒ“ƒvƒŒ[ƒg‚Ìˆø”‚ÅŽó‚¯Žæ‚Á‚½content‚ðbody‚É‚Í‚ßž‚ñ‚Å•`‰æ‚·‚é-->
+    <!--ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®å¼•æ•°ã§å—ã‘å–ã£ãŸcontentã‚’bodyã«ã¯ã‚è¾¼ã‚“ã§æç”»ã™ã‚‹-->
     <body>
         @content
     </body>
