@@ -17,12 +17,12 @@ import views._
 
 object Application extends Controller {
 
-  case class SampleForm(message: String, name: String)
+  case class SampleForm(message: String)
 
   // フォームのmessage, nameフィールドがtextフィールドであること、クラスの構築・分解メソッドを示す
   // play.api.data case class Form[T](mapping: Mapping[T], ~~
   val form1 = play.api.data.Form(
-    mapping("message" -> play.api.data.Forms.text, "name" -> play.api.data.Forms.text)(SampleForm.apply)(SampleForm.unapply)
+    mapping("message" -> play.api.data.Forms.text)(SampleForm.apply)(SampleForm.unapply)
   )
 
   def index = Action {
@@ -39,7 +39,7 @@ object Application extends Controller {
     var resform = form1.bindFromRequest // implicitでない場合は form1.bindFromRequest()(request)
 
     // res = request: POST /send, you typed: foo, your name: bar
-    var res = s"request: $request, you typed: ${resform.get.message}, your name: ${resform.get.name}"
+    var res = s"you typed: ${resform.get.message}"
     Ok(html.index(res, resform))
   }
 }
