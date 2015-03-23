@@ -16,30 +16,7 @@ import play.api.data.Forms._
 import views._
 
 object Application extends Controller {
-
-  case class SampleForm(message: String)
-
-  // フォームのmessage, nameフィールドがtextフィールドであること、クラスの構築・分解メソッドを示す
-  // play.api.data case class Form[T](mapping: Mapping[T], ~~
-  val form1 = play.api.data.Form(
-    mapping("message" -> play.api.data.Forms.text)(SampleForm.apply)(SampleForm.unapply)
-  )
-
   def index = Action {
-    Ok(html.index("何か書いて", form1))
-  }
-
-  // bindFromRequestでrequestパラメーターを使用するため、implicit requestが必要
-  def send = play.api.mvc.Action { implicit request =>
-    /*
-    def bindFromRequest()(implicit request: Request[_]): Form[T]
-    Binds request data to this form, i.e. handles form submission.
-    returns a copy of this form filled with the new data
-    */
-    var resform = form1.bindFromRequest // implicitでない場合は form1.bindFromRequest()(request)
-
-    // res = request: POST /send, you typed: foo, your name: bar
-    var res = s"you typed: ${resform.get.message}"
-    Ok(html.index(res, resform))
+    Ok(html.index("データベースのサンプル"))
   }
 }

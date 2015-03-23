@@ -1,17 +1,7 @@
-@(msg: String, form1: Form[Application.SampleForm])
-<!--Formに型引数を指定し、その型でデータのやりとりをする-->
+@(msg: String)
 
-@main("Welcome to Play") {
+@main("Sample page") {
 
   <h1>Hello!</h1>
   <p>@msg</p>
-  <!--helper.form(Actionの属性にsendメソッドを指定)
-    {テキストボックス入力とsubmitボタンを指定}-->
-  @helper.form(action = routes.Application.send){
-    @(helper.inputText (
-      field = form1("message")
-    ))
-
-    <input type="submit">
-  }
 }
