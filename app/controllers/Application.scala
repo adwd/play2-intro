@@ -19,8 +19,25 @@ import views._
 import models._
 
 object Application extends Controller {
+  
+  val messageForm = Form(
+  	  mapping(
+  	  	"id" -> longNumber,
+  	  	"name" -> nonEmptyText(maxLength = 30),
+  	  	"mail" -> nonEmptyText(maxLength = 30),
+  	  	"messaga" -> nonEmptyText(maxLength = 140),
+  	  	"postdate" -> sqlDate
+	  )(Message.apply)(Message.unapply)
+  	)
+
   def index = DBAction { implicit rs =>
   	val messages = MessageDAO.showAll
     Ok(html.index("データベースのサンプル", messages))
   }
+
+  def add = Action {
+  	Ok(views.html.add("投稿フォーム", messageForm))
+  }
+
+  def create = TODO
 }
