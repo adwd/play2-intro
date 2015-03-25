@@ -1,21 +1,36 @@
 package models
 
-import scala.slick.driver.H2Driver.simple._
-import scala.slick.lifted.{ProvenShape, ForeignKeyQuery}
 import java.sql.Date
 
-// Message Model class
-class Messages(tag: Tag)
-  extends Table[(Int, String, String, String, Date)](tag, "MESSAGES") {
+// Slick関連パッケージ
+import play.api.db.slick.Config.driver.simple._
 
-  // This is the primary key column:
-  def id: Column[Int] = column[Int]("ID", O.PrimaryKey)
-  def name: Column[String] = column[String]("NAME")
-  def mail: Column[String] = column[String]("MAIL")
-  def message: Column[String] = column[String]("MESSAGE")
-  def postdate: Column[Date] = column[Date]("POSTDATE")
-  
-  // Every table needs a * projection with the same type as the table's type parameter
-  def * : ProvenShape[(Int, String, String, String, Date)] =
-    (id, name, mail, message, postdate)
+// DTOの定義
+case class Message(id: Long, name: String, mail: String, message: String, postdate: Date)
+
+// この形式で記述することで、CREATE TABLE 文と DROP TABLE 文を自動的に生成します。
+class MessageTable(tag: Tag) extends Table[Message](tag, "MESSAGES") {
+
+  def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
+  def name = column[String]("NAME", O.NotNull)
+  def mail = column[String]("MAIL", O.NotNull)
+  def message = column[String]("MESSAGE", O.NotNull)
+  def postdate = column[Date]("POSTDATE")
+
+  def * = (id, name, mail, message, postdate) <> (Message.tupled, Message.unapply)
+}
+
+// DAOの定義
+object MessageDAO {
+  lazy val messageQuery = TableQuery[MessageTable]
+
+  // ID検索
+  def searchByID(id: Long)(implicit s: Session): Message = {
+    messageQuery.filter(_.id === id).first
+  }
+
+  // 作成
+  def create(message: Message)(implicit s: Session) {
+    messageQuery.insert(message)
+  }
 }
