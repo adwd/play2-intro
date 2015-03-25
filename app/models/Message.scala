@@ -33,4 +33,7 @@ object MessageDAO {
   def create(message: Message)(implicit s: Session) {
     messageQuery.insert(message)
   }
+
+  // 全件表示
+  def showAll(implicit s: Session): List[Message] = messageQuery.list
 }

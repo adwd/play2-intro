@@ -13,10 +13,14 @@ import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
 
+import play.api.db.slick._
+
 import views._
+import models._
 
 object Application extends Controller {
-  def index = Action {
-    Ok(html.index("データベースのサンプル"))
+  def index = DBAction { implicit rs =>
+  	val messages = MessageDAO.showAll
+    Ok(html.index("データベースのサンプル", messages))
   }
 }

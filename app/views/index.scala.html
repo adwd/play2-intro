@@ -1,7 +1,8 @@
-@(msg: String)
+@(msg: String, messages: List[Message])
 
 @main("Sample page") {
 
   <h1>Hello!</h1>
   <p>@msg</p>
+  <pre>@messages.toString</pre>
 }
