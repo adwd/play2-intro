@@ -19,19 +19,18 @@ import views._
 import models._
 
 object Application extends Controller {
-  
+
   val messageForm = Form(
   	  mapping(
   	  	"id" -> longNumber,
   	  	"name" -> nonEmptyText(maxLength = 30),
   	  	"mail" -> nonEmptyText(maxLength = 30),
-  	  	"messaga" -> nonEmptyText(maxLength = 140),
-  	  	"postdate" -> sqlDate
+  	  	"message" -> nonEmptyText(maxLength = 140)
 	  )(Message.apply)(Message.unapply)
   	)
 
   def index = DBAction { implicit rs =>
-  	val messages = MessageDAO.showAll
+  	val messages = MessageDAO.all
     Ok(html.index("データベースのサンプル", messages))
   }
 
@@ -39,5 +38,13 @@ object Application extends Controller {
   	Ok(views.html.add("投稿フォーム", messageForm))
   }
 
-  def create = TODO
+  def create = DBAction { implicit rs =>
+  	messageForm.bindFromRequest.fold(
+  		errors => BadRequest(views.html.add(errors.errors.toString, errors)),
+  		message => {
+  			MessageDAO.create(message)
+  			Redirect(routes.Application.index)
+      }
+    )
+  }
 }

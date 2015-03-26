@@ -3,17 +3,11 @@
 @main("Sample Page") {
 	<h1>Hello!</h1>
 	<p>@msg</p>
-	@helper.form(action = routes.Application.create){
-		@(helper.inputText(
-			field = form1("name")
-		))
-		@(helper.inputText(
-			field = form1("mail")
-		))
-		@(helper.textarea(
-			field = form1("message")
-		))
-
-	<input type="submit">
+	@helper.form(action = routes.Application.create){	
+      	<input type="hidden" name="id" value="0">
+		@helper.inputText(form1("name"))
+		@helper.inputText(form1("mail"))
+		@helper.textarea(form1("message"))
+		<input type="submit">
 	}
 }

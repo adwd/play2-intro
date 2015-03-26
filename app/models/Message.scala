@@ -6,7 +6,7 @@ import java.sql.Date
 import play.api.db.slick.Config.driver.simple._
 
 // DTOの定義
-case class Message(id: Long, name: String, mail: String, message: String, postdate: Date)
+case class Message(id: Long, name: String, mail: String, message: String)
 
 // この形式で記述することで、CREATE TABLE 文と DROP TABLE 文を自動的に生成します。
 class MessageTable(tag: Tag) extends Table[Message](tag, "MESSAGES") {
@@ -15,9 +15,9 @@ class MessageTable(tag: Tag) extends Table[Message](tag, "MESSAGES") {
   def name = column[String]("NAME", O.NotNull)
   def mail = column[String]("MAIL", O.NotNull)
   def message = column[String]("MESSAGE", O.NotNull)
-  def postdate = column[Date]("POSTDATE")
+  //def postdate = column[Date]("POSTDATE")
 
-  def * = (id, name, mail, message, postdate) <> (Message.tupled, Message.unapply)
+  def * = (id, name, mail, message) <> (Message.tupled, Message.unapply)
 }
 
 // DAOの定義
@@ -35,5 +35,5 @@ object MessageDAO {
   }
 
   // 全件表示
-  def showAll(implicit s: Session): List[Message] = messageQuery.list
+  def all(implicit s: Session): List[Message] = messageQuery.list
 }
