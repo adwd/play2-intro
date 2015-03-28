@@ -25,8 +25,8 @@ object MessageDAO {
   lazy val messageQuery = TableQuery[MessageTable]
 
   // ID検索
-  def searchByID(id: Long)(implicit s: Session): Message = {
-    messageQuery.filter(_.id === id).first
+  def searchByID(id: Long)(implicit s: Session): Option[Message] = {
+    messageQuery.filter(_.id === id).firstOption
   }
 
   // 作成
@@ -36,4 +36,9 @@ object MessageDAO {
 
   // 全件表示
   def all(implicit s: Session): List[Message] = messageQuery.list
+
+  // 更新
+  def update(message: Message)(implicit s: Session): Unit = {
+    messageQuery.filter(_.id === message.id).update(message)
+  }
 }

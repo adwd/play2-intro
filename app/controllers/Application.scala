@@ -35,16 +35,46 @@ object Application extends Controller {
   }
 
   def add = Action {
-  	Ok(views.html.add("投稿フォーム", messageForm))
+  	Ok(html.add("投稿フォーム", messageForm))
   }
 
   def create = DBAction { implicit rs =>
   	messageForm.bindFromRequest.fold(
-  		errors => BadRequest(views.html.add(errors.errors.toString, errors)),
+  		errors => BadRequest(html.add(errors.errors.toString, errors)),
   		message => {
   			MessageDAO.create(message)
   			Redirect(routes.Application.index)
       }
     )
   }
+
+	// 編集するアイテムのIDを入力する画面を表示する
+	def setitem = Action {
+		Ok(html.item("ID番号を入力", messageForm))
+	}
+
+	// 指定されたIDのアイテムの編集画面を表示する
+	def edit = DBAction { implicit rs =>
+		messageForm.bindFromRequest.fold(
+			errors => BadRequest(html.item("ERROR: 入力に問題があります" + errors.errors.toString, errors)),
+			message => {
+				// idを検索してあったら編集のページヘ移動、無かったらエラー表示
+				MessageDAO.searchByID(message.id) match {
+					case Some(m) => Ok(html.edit(s"", messageForm.fill(m)))
+					case None => Ok(html.item("ERROR: IDの投稿が見つかりません", messageForm.fill(message)))
+				}
+			}
+		)
+	}
+
+	// フォームに入力された内容で更新する
+	def update = DBAction { implicit re =>
+		messageForm.bindFromRequest.fold(
+			error => BadRequest(html.edit("ERROR: 再度入力ください " + error.errors.toString, error)),
+			message => {
+					MessageDAO.update(message)
+					Redirect(routes.Application.index)
+				}
+		)
+	}
 }
