@@ -74,7 +74,29 @@ object Application extends Controller {
 			message => {
 					MessageDAO.update(message)
 					Redirect(routes.Application.index)
-				}
+			}
 		)
 	}
+
+	// 削除するアイテムのIDを入力する画面を表示
+	def delete = Action {
+		Ok(html.delete("削除するID番号を入力", messageForm))
+	}
+
+	def remove = DBAction { implicit rs =>
+		messageForm.bindFromRequest.fold(
+			error => BadRequest(html.edit("ERROR: 入力にエラーが起こりました " + error.errors.toString, error)),
+			message => {
+				// idを検索してあったら削除、無かったらエラー表示
+				MessageDAO.searchByID(message.id) match {
+					case Some(m) => {
+						MessageDAO.delete(m)
+						Redirect(routes.Application.index)
+					}
+					case None => Ok(html.item("ERROR: IDの投稿が見つかりません", messageForm.fill(message)))
+				}
+			}
+		)
+	}
+
 }

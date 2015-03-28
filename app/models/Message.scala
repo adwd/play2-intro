@@ -41,4 +41,8 @@ object MessageDAO {
   def update(message: Message)(implicit s: Session): Unit = {
     messageQuery.filter(_.id === message.id).update(message)
   }
+
+  def delete(message: Message)(implicit s: Session) = {
+    messageQuery.filter(_.id === message.id).delete
+  }
 }
