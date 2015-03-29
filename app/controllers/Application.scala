@@ -14,8 +14,8 @@ import play.api.data.Form
 import play.api.data.Forms._
 
 import play.api.db.slick._
-
 import play.api.data.validation.Constraints.{pattern}
+import java.sql.Timestamp
 
 import views._
 import models._
@@ -28,7 +28,8 @@ object Application extends Controller {
   	  "name" -> nonEmptyText.verifying(pattern("""[0-9a-zA-Z]+""".r,
 				error = "半角英数だけで入力してください。")),
   	  "mail" -> email,
-  	  "message" -> nonEmptyText.verifying(msg => msg == "message" && msg.length < 140)
+  	  "message" -> nonEmptyText.verifying("メッセージエラー", msg => msg.length < 140),
+			"postdate" -> ignored(new Timestamp(new java.util.Date().getTime()))
 	  )(Message.apply)(Message.unapply)
 	)
 
