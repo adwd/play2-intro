@@ -29,6 +29,11 @@ object MessageDAO {
     messageQuery.filter(_.id === id).firstOption
   }
 
+  // 検索
+  def search(word: String)(implicit s: Session): List[Message] = {
+    messageQuery.filter(row => (row.name like "%"+word+"%") || (row.mail like "%"+word+"%")).list
+  }
+
   // 作成
   def create(message: Message)(implicit s: Session) {
     messageQuery.insert(message)

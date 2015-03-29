@@ -21,13 +21,21 @@ import models._
 object Application extends Controller {
 
   val messageForm = Form(
-  	  mapping(
-  	  	"id" -> longNumber,
-  	  	"name" -> nonEmptyText(maxLength = 30),
-  	  	"mail" -> nonEmptyText(maxLength = 30),
-  	  	"message" -> nonEmptyText(maxLength = 140)
+		mapping(
+  		"id" -> longNumber,
+  	  "name" -> nonEmptyText(maxLength = 30),
+  	  "mail" -> nonEmptyText(maxLength = 30),
+  	  "message" -> nonEmptyText(maxLength = 140)
 	  )(Message.apply)(Message.unapply)
-  	)
+	)
+
+	case class FindForm(input: String)
+
+	val findForm = Form(
+		mapping(
+			"input" -> nonEmptyText(maxLength = 30)
+		)(FindForm.apply)(FindForm.unapply)
+	)
 
   def index = DBAction { implicit rs =>
   	val messages = MessageDAO.all
@@ -97,6 +105,15 @@ object Application extends Controller {
 				}
 			}
 		)
+	}
+
+	def find = DBAction { implicit rs =>
+		val find = findForm.bindFromRequest.fold(
+			error => Nil,
+			success => MessageDAO.search(success.input)
+		)
+
+		Ok(html.find("投稿の編集", findForm.bindFromRequest, find))
 	}
 
 }
