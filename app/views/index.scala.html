@@ -1,4 +1,4 @@
-@(msg: String, messages: List[Message])
+@(msg: String, messages: List[Message], members: List[Member])
 
 @main("Sample page") {
 
@@ -17,11 +17,15 @@
       @messages.map { message =>
       <tr>
         <td>@message.id</td>
-        <td><a href="@routes.Application.edit">@message.name</a></td>
+        <td>@message.name</td>
         <td>@message.message</td>
         <td>@message.postdate</td>
       </tr>
       }
     </tbody>
   </table>
+
+  <hr/>
+  <p>Member Model</p>
+  <p>@members</p>
 }
