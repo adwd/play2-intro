@@ -31,7 +31,9 @@ object MessageDAO {
 
   // 検索
   def search(word: String)(implicit s: Session): List[Message] = {
-    messageQuery.filter(row => (row.name like "%"+word+"%") || (row.mail like "%"+word+"%")).list
+    messageQuery.filter(row => (row.name like "%"+word+"%") || (row.mail like "%"+word+"%"))
+      .sortBy(_.name.desc)
+      .list
   }
 
   // 作成

@@ -4,5 +4,22 @@
 
   <h1>Hello!</h1>
   <p>@msg</p>
-  <pre>@messages.toString</pre>
+  <table>
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>message</th>
+      </tr>
+    </thead>
+    <tbody>
+      @messages.map { message =>
+      <tr>
+        <td>@message.id</td>
+        <td><a href="@routes.Application.edit">@message.name</a></td>
+        <td>@message.message</td>
+      </tr>
+      }
+    </tbody>
+  </table>
 }

@@ -15,6 +15,8 @@ import play.api.data.Forms._
 
 import play.api.db.slick._
 
+import play.api.data.validation.Constraints.{pattern}
+
 import views._
 import models._
 
@@ -22,10 +24,11 @@ object Application extends Controller {
 
   val messageForm = Form(
 		mapping(
-  		"id" -> longNumber,
-  	  "name" -> nonEmptyText(maxLength = 30),
-  	  "mail" -> nonEmptyText(maxLength = 30),
-  	  "message" -> nonEmptyText(maxLength = 140)
+  		"id" -> longNumber(min = 0, max = 1000),
+  	  "name" -> nonEmptyText.verifying(pattern("""[0-9a-zA-Z]+""".r,
+				error = "半角英数だけで入力してください。")),
+  	  "mail" -> email,
+  	  "message" -> nonEmptyText.verifying(msg => msg == "message" && msg.length < 140)
 	  )(Message.apply)(Message.unapply)
 	)
 
