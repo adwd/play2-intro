@@ -14,11 +14,12 @@ import views._
 import models._
 
 object Application extends Controller {
-  def index = Action {
-    Ok(html.index("test"))
-  }
-
-  def query(msg: String, id: Int) = Action {
-    Ok(html.index(s"引数は、${msg}, ${id}です"))
+  def index = Action { request =>
+    request.method match {
+      case "POST" =>
+        val msg = request.body.asFormUrlEncoded.get("input")(0)
+        Ok(html.index(s"posted: $msg"))
+      case _ => Ok(html.index("please type"))
+    }
   }
 }
