@@ -14,11 +14,11 @@ import views._
 import models._
 
 object Application extends Controller {
-  def index = Action { implicit request =>
-    val message = request.getQueryString("msg") match {
-      case Some(x) => s"引数は${x}です"
-      case _ => "no query string"
-    }
-    Ok(html.index(message))
+  def index = Action {
+    Ok(html.index("test"))
+  }
+
+  def query(msg: String, id: Int) = Action {
+    Ok(html.index(s"引数は、${msg}, ${id}です"))
   }
 }
