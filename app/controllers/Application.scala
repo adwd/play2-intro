@@ -34,6 +34,7 @@ object Application extends Controller {
 	val messageForm = Form(
 		mapping(
 			"id" -> longNumber(min = 0, max = 1000),
+			"memberid" -> longNumber,
 			"name" -> nonEmptyText.verifying(pattern("""[0-9a-zA-Z]+""".r,
 				error = "半角英数だけで入力してください。")),
 			"message" -> nonEmptyText.verifying("メッセージエラー", msg => msg.length < 140),

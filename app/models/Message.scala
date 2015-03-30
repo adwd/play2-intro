@@ -4,19 +4,25 @@ import java.sql.Timestamp
 
 // Slick関連パッケージ
 import play.api.db.slick.Config.driver.simple._
+import scala.slick.lifted.ForeignKeyQuery
 
 // DTOの定義
-case class Message(id: Long, name: String, message: String, postdate: Timestamp)
+case class Message(id: Long, memberid: Long, name: String, message: String, postdate: Timestamp)
 
 // この形式で記述することで、CREATE TABLE 文と DROP TABLE 文を自動的に生成します。
 class MessageTable(tag: Tag) extends Table[Message](tag, "MESSAGES") {
 
   def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
+  def memberid = column[Long]("MEMBER_ID")
   def name = column[String]("NAME", O.NotNull)
   def message = column[String]("MESSAGE", O.NotNull)
   def postdate = column[Timestamp]("POSTDATE", O.NotNull)
 
-  def * = (id, name, message, postdate) <> (Message.tupled, Message.unapply)
+  def * = (id, memberid, name, message, postdate) <> (Message.tupled, Message.unapply)
+
+  // A reified foreign key relation that can be navigated to create a join
+  def member: ForeignKeyQuery[MemberTable, Member] =
+    foreignKey("MEMBER_FK", memberid, TableQuery[MemberTable])(_.id)
 }
 
 // DAOの定義
