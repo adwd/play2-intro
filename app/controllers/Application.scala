@@ -12,13 +12,23 @@ import play.api.mvc._
 // Viewでのヘルパー等に関するクラス
 // import play.api.views._
 
+import java.util.Date
+
 import views._
 import models._
 
 object Application extends Controller {
+	case class SampleForm(
+												 input: String,
+												 pass: String,
+												 check: Boolean,
+												 radio: String,
+												 sel: String,
+												 area: String,
+												 date: Date)
 
 	val sampleform = Form(
-		tuple(
+		mapping(
 			"input" -> text,
 			"pass"  -> text,
 			"check" -> boolean,
@@ -26,13 +36,18 @@ object Application extends Controller {
 			"sel"   -> text,
 			"area"  -> text,
 			"date"  -> date
-		)
+		)(SampleForm.apply)(SampleForm.unapply)
 	)
 
   def index = Action {
-		val form = sampleform.fill("default value", "", true, "windows", "uk", "", null)
+		val form = sampleform.fill(SampleForm("default value", "", true, "windows", "uk", "", null))
 		Ok(html.index("please fill form", form))
   }
 
-	def send = TODO
+	def send = Action { implicit rs =>
+		sampleform.bindFromRequest().fold(
+			error => BadRequest(html.index("error", error)),
+			success => Ok(html.index(success.toString, sampleform.fill(success)))
+		)
+	}
 }

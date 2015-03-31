@@ -1,4 +1,4 @@
-@(msg: String, form1: Form[(String, String, Boolean, String, String, String, java.util.Date)])
+@(msg: String, form1: Form[Application.SampleForm])
 
 @import helper._
 
@@ -8,7 +8,7 @@
     @msg
   </p>
   @form(action = routes.Application.send) {
-    @inputText(form1("input"))
+    @inputText(field = form1("input"), args = '_label -> "raberu", '_help -> "herupu")
     @inputPassword(form1("pass"))
     @checkbox(form1("check"))
     @inputRadioGroup(
