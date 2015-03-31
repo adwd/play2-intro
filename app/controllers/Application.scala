@@ -12,42 +12,63 @@ import play.api.mvc._
 // Viewでのヘルパー等に関するクラス
 // import play.api.views._
 
-import java.util.Date
+import play.api.db.slick._
+import play.api.data.validation.Constraints.{pattern}
+import java.sql.Timestamp
 
 import views._
 import models._
 
 object Application extends Controller {
-	case class SampleForm(
-												 input: String,
-												 pass: String,
-												 check: Boolean,
-												 radio: String,
-												 sel: String,
-												 area: String,
-												 date: Date)
+  val memberForm = Form(
+    mapping(
+      "id" -> longNumber,
+      "name" -> nonEmptyText,
+      "mail" -> nonEmptyText,
+      "tel" -> nonEmptyText
+    )(Member.apply)(Member.unapply)
+  )
 
-	val sampleform = Form(
-		mapping(
-			"input" -> text,
-			"pass"  -> text,
-			"check" -> boolean,
-			"radio" -> text,
-			"sel"   -> text,
-			"area"  -> text,
-			"date"  -> date
-		)(SampleForm.apply)(SampleForm.unapply)
-	)
+  val messageForm = Form(
+    mapping(
+      "id" -> longNumber,
+      "memberid" -> ignored(0L),
+      "message" -> nonEmptyText,
+      "postdate" -> ignored(new Timestamp(new java.util.Date().getTime()))
+    )(Message.apply)(Message.unapply)
+  )
 
-  def index = Action {
-		val form = sampleform.fill(SampleForm("default value", "", true, "windows", "uk", "", null))
-		Ok(html.index("please fill form", form))
+  def index = DBAction { implicit rs =>
+		Ok(html.index("messages", MessageDAO.all, MemberDAO.all))
   }
 
-	def send = Action { implicit rs =>
-		sampleform.bindFromRequest().fold(
-			error => BadRequest(html.index("error", error)),
-			success => Ok(html.index(success.toString, sampleform.fill(success)))
-		)
-	}
+  def addMessage = DBAction { implicit rs =>
+    Ok(html.addmessage("投稿フォーム", messageForm, MemberDAO.all))
+  }
+
+  def addMember = Action {
+    Ok(html.addmember("メンバー登録フォーム", memberForm))
+  }
+
+  def createMessage = DBAction { implicit rs =>
+    messageForm.bindFromRequest.fold(
+      errors => BadRequest(html.addmessage(errors.errors.toString, errors, MemberDAO.all)),
+      message => {
+        val name: String = messageForm.bindFromRequest.apply("name").value.get
+        val createdmessage = message.copy(memberid = MemberDAO.search(name).apply(0).id)
+        MessageDAO.create(createdmessage)
+        Redirect(routes.Application.index)
+      }
+    )
+  }
+
+  def createMember = DBAction { implicit rs =>
+    memberForm.bindFromRequest.fold(
+      errors => BadRequest(html.addmember(errors.errors.toString, errors)),
+      member => {
+        MemberDAO.create(member)
+        Redirect(routes.Application.index)
+      }
+    )
+  }
 }

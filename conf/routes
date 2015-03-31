@@ -5,7 +5,10 @@
 # Home page
 # describe routing as HTTP method, address, method
 GET     /                           controllers.Application.index
-POST    /                           controllers.Application.send
+GET     /addmessage                 controllers.Application.addMessage
+POST    /createmessage              controllers.Application.createMessage
+GET     /addmember                  controllers.Application.addMember
+POST    /createmember               controllers.Application.createMember
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

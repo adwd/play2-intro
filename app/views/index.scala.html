@@ -1,26 +1,40 @@
-@(msg: String, form1: Form[Application.SampleForm])
+@(msg: String, messages: List[Message], members: List[Member])
 
 @import helper._
 
 @main("sample page") {
   <h1>hello</h1>
-  <p>
-    @msg
-  </p>
-  @form(action = routes.Application.send) {
-    @inputText(field = form1("input"), args = '_label -> "raberu", '_help -> "herupu")
-    @inputPassword(form1("pass"))
-    @checkbox(form1("check"))
-    @inputRadioGroup(
-      field = form1("radio"),
-      options = Seq("windows" -> "Windows", "mac" -> "Mac OS X", "linux" -> "Linux")
-    )
-    @select(
-      field = form1("sel"),
-      options = Seq("jp" -> "Japan", "us" -> "United States", "uk" -> "UK")
-    )
-    @textarea(form1("area"))
-    @inputDate(form1("date"))
-    <input type="submit"/>
-  }
+  <p>@msg</p>
+
+  <table>
+    <tr>
+      <th>id</th>
+      <th>Message</th>
+    </tr>
+    @for(message <- messages){
+      <tr>
+        <td>@message.id</td>
+        <td>@message.message</td>
+      </tr>
+    }
+  </table>
+
+  <hr>
+
+  <table>
+    <tr>
+      <th>id</th>
+      <th>Name</th>
+      <th>Mail</th>
+      <th>Tel</th>
+    </tr>
+    @for(member <- members){
+      <tr>
+        <td>@member.id</td>
+        <td>@member.name</td>
+        <td>@member.mail</td>
+        <td>@member.tel</td>
+      </tr>
+    }
+  </table>
 }
