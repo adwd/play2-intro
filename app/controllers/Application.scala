@@ -16,6 +16,8 @@ import play.api.db.slick._
 import play.api.data.validation.Constraints.{pattern}
 import java.sql.Timestamp
 
+import play.api.libs.json._
+
 import views._
 import models._
 
@@ -70,5 +72,11 @@ object Application extends Controller {
         Redirect(routes.Application.index)
       }
     )
+  }
+
+  def ajax = Action { req =>
+    val s: String = req.body.asFormUrlEncoded.get("input")(0)
+    val json: JsObject = Json.obj("status" -> "OK", "message" -> s)
+    Ok(json)
   }
 }

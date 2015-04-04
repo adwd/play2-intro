@@ -9,6 +9,7 @@ GET     /addmessage                 controllers.Application.addMessage
 POST    /createmessage              controllers.Application.createMessage
 GET     /addmember                  controllers.Application.addMember
 POST    /createmember               controllers.Application.createMember
+POST    /ajax                       controllers.Application.ajax
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

@@ -3,8 +3,11 @@
 @import helper._
 
 @main("sample page") {
+  <script src="@routes.Assets.at("javascripts/index.js")"></script>
   <h1>hello</h1>
-  <p>@msg</p>
+  <p><input type="text" id="input"><button id="sendbtn">submit</button></p>
+
+  <p id="message">@msg</p>
 
   <table>
     <tr>
